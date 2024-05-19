@@ -11,6 +11,11 @@ $ brew install protobuf
 
 $ protoc --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=./ --ts_proto_opt=nestJs=true ./proto/auth.proto
 
+$ protoc --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=./ --ts_proto_opt=nestJs=true ./proto/supplier.proto
+
+$ npx @nestjs/cli generate app catalog
+$ npx @nestjs/cli generate resource supplier
+
 $ npx @nestjs/cli generate lib common
 
 
