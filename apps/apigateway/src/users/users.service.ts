@@ -3,7 +3,7 @@ import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import {
   CreateUserDto,
   USERS_SERVICE_NAME,
-  UpdateUserDTO,
+  UpdateUserDto,
   UsersServiceClient,
 } from '@app/common';
 import { AUTH_SERVICE } from './constants';
@@ -31,7 +31,7 @@ export class UsersService implements OnModuleInit {
     return this.usersService.findOneUser({ id });
   }
 
-  update(id: string, updateUserDto: UpdateUserDTO) {
+  update(id: string, updateUserDto: UpdateUserDto) {
     return this.usersService.updateUser({
       id,
       ...updateUserDto,

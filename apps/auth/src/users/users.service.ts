@@ -1,11 +1,16 @@
 import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
 
 import { randomUUID } from 'crypto';
-import { CreateUserDto, PaginationDTO, UpdateUserDTO, User, Users } from '@app/common';
+import {
+  CreateUserDto,
+  PaginationDto,
+  UpdateUserDto,
+  User,
+  Users,
+} from '@app/common';
 import { Observable, Subject } from 'rxjs';
 @Injectable()
-export class UsersService implements OnModuleInit{
-
+export class UsersService implements OnModuleInit {
   private readonly users: User[] = [];
 
   onModuleInit() {
@@ -13,8 +18,8 @@ export class UsersService implements OnModuleInit{
       this.create({
         username: randomUUID(),
         password: randomUUID(),
-        age: 18 + i
-      })
+        age: 18 + i,
+      });
     }
   }
 
@@ -23,7 +28,7 @@ export class UsersService implements OnModuleInit{
       ...createUserDto,
       subscribed: false,
       socialMedia: {},
-      id: randomUUID()
+      id: randomUUID(),
     };
     this.users.push(user);
 
@@ -35,17 +40,17 @@ export class UsersService implements OnModuleInit{
   }
 
   findOne(id: string): User {
-    return this.users.find(user => user.id === id);
+    return this.users.find((user) => user.id === id);
   }
 
-  update(id: string, updateUserDto: UpdateUserDTO): User {
+  update(id: string, updateUserDto: UpdateUserDto): User {
     const userIndex = this.users.findIndex((user) => user.id === id);
 
     if (userIndex !== -1) {
       this.users[userIndex] = {
         ...this.users[userIndex],
         ...updateUserDto,
-      }
+      };
 
       return this.users[userIndex];
     }
@@ -62,23 +67,25 @@ export class UsersService implements OnModuleInit{
     throw new NotFoundException('User not found');
   }
 
-  queryUsers(paginationDtoStream: Observable<PaginationDTO>): Observable<Users> {
+  queryUsers(
+    paginationDtoStream: Observable<PaginationDto>,
+  ): Observable<Users> {
     const subject = new Subject<Users>();
 
-    const onNext = (paginationDto: PaginationDTO) => {
+    const onNext = (paginationDto: PaginationDto) => {
       const start = paginationDto.page + paginationDto.skip;
       subject.next({
-        users: this.users.slice(start, start + paginationDto.skip)
-      })
-    }
+        users: this.users.slice(start, start + paginationDto.skip),
+      });
+    };
 
     const onComplete = () => subject.complete();
 
     paginationDtoStream.subscribe({
       next: onNext,
-      complete: onComplete
+      complete: onComplete,
     });
 
-    return subject.asObservable()
+    return subject.asObservable();
   }
 }
